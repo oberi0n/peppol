@@ -51,3 +51,14 @@ Le conteneur inclut aussi:
 - `/.well-known/appspecific/com.chrome.devtools.json`
 
 pour éviter les erreurs 404 fréquentes émises par Chrome sur certains postes.
+
+
+## Multilingual UI
+
+The interface supports:
+
+- English (default)
+- French
+- German
+
+Use the language selector at the top of the page.

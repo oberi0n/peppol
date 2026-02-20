@@ -47,6 +47,31 @@ body {
   display: block;
 }
 
+
+.topbar {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.lang-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--accent-strong);
+  font-weight: 600;
+}
+
+.lang-switch select {
+  border: 1px solid #9ec0e3;
+  background: #fff;
+  border-radius: 8px;
+  padding: 6px 10px;
+  color: var(--text);
+}
+
 h1 {
   margin: 2px 0 0;
   font-size: clamp(1.5rem, 2.8vw, 2.3rem);

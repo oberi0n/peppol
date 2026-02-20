@@ -3,13 +3,140 @@ const NS = {
   cac: "urn:oasis:names:specification:ubl:schema:xsd:CommonAggregateComponents-2",
 };
 
+const I18N = {
+  en: {
+    language: "Language",
+    title: "Peppol Invoice Interpreter",
+    subtitle: "Upload a UBL XML invoice and instantly view header data, parties, invoice lines, totals, and embedded PDF.",
+    ublFile: "UBL XML file",
+    interpret: "Interpret",
+    hint: "Limit: 20 MB • Processed locally in your browser",
+    header: "Header",
+    invoiceId: "Invoice ID",
+    issueDate: "Issue date",
+    dueDate: "Due date",
+    currency: "Currency",
+    buyerReference: "Buyer reference",
+    supplier: "Supplier",
+    customer: "Customer",
+    name: "Name",
+    vat: "VAT",
+    email: "Email",
+    lines: "Lines",
+    description: "Description",
+    qty: "Qty",
+    unitPrice: "Unit price",
+    total: "Total",
+    totals: "Totals",
+    subtotal: "Subtotal",
+    totalInclTax: "Total incl. tax",
+    payable: "Payable",
+    embeddedPdf: "Embedded PDF",
+    openPdf: "Open PDF",
+    downloadPdf: "Download PDF",
+    noLines: "No invoice lines found.",
+    fileTooLarge: "File too large (> 20 MB).",
+    fileReadError: "Unable to read the file.",
+    noXmlLoaded: "No XML file loaded.",
+    xmlInvalid: "Invalid XML",
+    unknownError: "Unknown error.",
+  },
+  fr: {
+    language: "Langue",
+    title: "Interpréteur de facture Peppol",
+    subtitle: "Chargez une facture UBL XML et visualisez instantanément l'en-tête, les parties, les lignes, les totaux et le PDF embarqué.",
+    ublFile: "Fichier XML UBL",
+    interpret: "Interpréter",
+    hint: "Limite: 20 MB • Traitement local dans le navigateur",
+    header: "En-tête",
+    invoiceId: "ID facture",
+    issueDate: "Date d'émission",
+    dueDate: "Date d'échéance",
+    currency: "Devise",
+    buyerReference: "Référence acheteur",
+    supplier: "Fournisseur",
+    customer: "Client",
+    name: "Nom",
+    vat: "TVA",
+    email: "Email",
+    lines: "Lignes",
+    description: "Description",
+    qty: "Qté",
+    unitPrice: "PU",
+    total: "Total",
+    totals: "Totaux",
+    subtotal: "HT",
+    totalInclTax: "TTC",
+    payable: "À payer",
+    embeddedPdf: "PDF embarqué",
+    openPdf: "Ouvrir le PDF",
+    downloadPdf: "Télécharger le PDF",
+    noLines: "Aucune ligne trouvée.",
+    fileTooLarge: "Fichier trop gros (> 20 MB).",
+    fileReadError: "Impossible de lire le fichier.",
+    noXmlLoaded: "Aucun fichier XML chargé.",
+    xmlInvalid: "XML invalide",
+    unknownError: "Erreur inconnue.",
+  },
+  de: {
+    language: "Sprache",
+    title: "Peppol-Rechnungs-Interpreter",
+    subtitle: "Laden Sie eine UBL-XML-Rechnung hoch und sehen Sie sofort Kopfzeile, Parteien, Positionen, Summen und eingebettetes PDF.",
+    ublFile: "UBL-XML-Datei",
+    interpret: "Auswerten",
+    hint: "Limit: 20 MB • Lokal im Browser verarbeitet",
+    header: "Kopfbereich",
+    invoiceId: "Rechnungs-ID",
+    issueDate: "Ausstellungsdatum",
+    dueDate: "Fälligkeitsdatum",
+    currency: "Währung",
+    buyerReference: "Käuferreferenz",
+    supplier: "Lieferant",
+    customer: "Kunde",
+    name: "Name",
+    vat: "MwSt.",
+    email: "E-Mail",
+    lines: "Positionen",
+    description: "Beschreibung",
+    qty: "Menge",
+    unitPrice: "Einzelpreis",
+    total: "Gesamt",
+    totals: "Summen",
+    subtotal: "Netto",
+    totalInclTax: "Brutto",
+    payable: "Zahlbetrag",
+    embeddedPdf: "Eingebettetes PDF",
+    openPdf: "PDF öffnen",
+    downloadPdf: "PDF herunterladen",
+    noLines: "Keine Rechnungspositionen gefunden.",
+    fileTooLarge: "Datei zu groß (> 20 MB).",
+    fileReadError: "Datei konnte nicht gelesen werden.",
+    noXmlLoaded: "Keine XML-Datei geladen.",
+    xmlInvalid: "Ungültiges XML",
+    unknownError: "Unbekannter Fehler.",
+  },
+};
+
 const fileInput = document.getElementById("xmlFile");
 const goBtn = document.getElementById("go");
 const out = document.getElementById("out");
 const errorBox = document.getElementById("errorBox");
+const languageSelect = document.getElementById("languageSelect");
 
 let loadedXmlStr = null;
 let lastBlobUrl = null;
+let currentLang = "en";
+
+function t(key) {
+  return I18N[currentLang][key] || I18N.en[key] || key;
+}
+
+function applyTranslations(root = document) {
+  root.querySelectorAll("[data-i18n]").forEach((el) => {
+    el.textContent = t(el.dataset.i18n);
+  });
+  document.documentElement.lang = currentLang;
+}
 
 function setError(message) {
   errorBox.textContent = message;
@@ -25,7 +152,7 @@ function parseXml(str) {
   const doc = new DOMParser().parseFromString(str, "application/xml");
   const err = doc.querySelector("parsererror");
   if (err) {
-    throw new Error(`XML invalide: ${err.textContent.slice(0, 200)}`);
+    throw new Error(`${t("xmlInvalid")}: ${err.textContent.slice(0, 200)}`);
   }
   return doc;
 }
@@ -68,6 +195,8 @@ function renderInvoice(xmlDoc) {
   const invoice = xmlDoc.documentElement;
   const tpl = document.getElementById("invoiceTemplate").content.cloneNode(true);
 
+  applyTranslations(tpl);
+
   tpl.querySelectorAll("[data-path]").forEach((el) => {
     el.textContent = valueByPath(invoice, el.dataset.path);
   });
@@ -75,7 +204,7 @@ function renderInvoice(xmlDoc) {
   const rows = tpl.getElementById("lineRows");
   const lines = xmlDoc.getElementsByTagNameNS(NS.cac, "InvoiceLine");
   if (lines.length === 0) {
-    rows.innerHTML = '<tr><td colspan="5">Aucune ligne trouvée.</td></tr>';
+    rows.innerHTML = `<tr><td colspan="5">${t("noLines")}</td></tr>`;
   } else {
     for (const line of lines) {
       const tr = document.createElement("tr");
@@ -109,6 +238,18 @@ function renderInvoice(xmlDoc) {
   out.appendChild(tpl);
 }
 
+languageSelect.addEventListener("change", () => {
+  currentLang = languageSelect.value;
+  applyTranslations();
+  if (loadedXmlStr) {
+    try {
+      renderInvoice(parseXml(loadedXmlStr));
+    } catch {
+      // keep current state if XML fails on live language switch
+    }
+  }
+});
+
 fileInput.addEventListener("change", () => {
   loadedXmlStr = null;
   out.innerHTML = "";
@@ -120,14 +261,14 @@ fileInput.addEventListener("change", () => {
   }
   if (file.size > 20 * 1024 * 1024) {
     goBtn.disabled = true;
-    setError("Fichier trop gros (> 20 MB).");
+    setError(t("fileTooLarge"));
     return;
   }
 
   const reader = new FileReader();
   reader.onerror = () => {
     goBtn.disabled = true;
-    setError("Impossible de lire le fichier.");
+    setError(t("fileReadError"));
   };
   reader.onload = () => {
     loadedXmlStr = String(reader.result || "").trimStart();
@@ -146,10 +287,12 @@ goBtn.addEventListener("click", () => {
   }
 
   try {
-    if (!loadedXmlStr) throw new Error("Aucun fichier XML chargé.");
+    if (!loadedXmlStr) throw new Error(t("noXmlLoaded"));
     const xmlDoc = parseXml(loadedXmlStr);
     renderInvoice(xmlDoc);
   } catch (error) {
-    setError(error.message || "Erreur inconnue.");
+    setError(error.message || t("unknownError"));
   }
 });
+
+applyTranslations();
