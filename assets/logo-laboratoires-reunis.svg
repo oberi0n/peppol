@@ -1,6 +1,6 @@
-<svg width="600" height="112" viewBox="0 0 600 112" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Laboratoires Réunis">
-  <rect x="0.5" y="0.5" width="599" height="111" rx="27.5" fill="#005CA9"/>
-  <rect x="8" y="8" width="378" height="96" fill="white"/>
-  <text x="37" y="72" fill="#E45138" font-family="'Arial Black', Arial, Helvetica, sans-serif" font-size="47" font-weight="900" letter-spacing="0">LABORATOIRES</text>
-  <text x="402" y="72" fill="white" font-family="'Arial Black', Arial, Helvetica, sans-serif" font-size="52" font-weight="900" letter-spacing="0">RÉUNIS</text>
+<svg width="600" height="112" viewBox="0 0 600 112" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Laboratoires Réunis">
+  <rect width="600" height="112" rx="28" fill="#005CA9"/>
+  <rect x="8" y="8" width="378" height="96" fill="#FFFFFF"/>
+  <text x="36" y="71" fill="#E2503A" font-family="Arial, Helvetica, sans-serif" font-size="47" font-weight="700">LABORATOIRES</text>
+  <text x="402" y="71" fill="#FFFFFF" font-family="Arial, Helvetica, sans-serif" font-size="53" font-weight="700">RÉUNIS</text>
 </svg>

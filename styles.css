@@ -38,10 +38,11 @@ body {
 
 .hero { margin-bottom: 20px; }
 
-.brand-wrap { display: flex; align-items: center; margin-bottom: 14px; }
+.brand-wrap { display: block; margin-bottom: 14px; }
 
 .brand-logo {
-  width: min(100%, 600px);
+  width: 600px;
+  max-width: 100%;
   height: auto;
   display: block;
 }
