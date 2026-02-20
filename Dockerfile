@@ -4,5 +4,6 @@ WORKDIR /usr/share/nginx/html
 
 COPY index.html app.js styles.css service-worker.js ./
 COPY .well-known ./.well-known
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80

@@ -19,10 +19,19 @@ Puis ouvrir `http://localhost:4173`.
 
 ## Lancer avec Docker
 
-### Build + run (Docker)
+### Important
+
+Si vous voyez une page blanche, c'est souvent une image Docker locale obsolète.
+
+Rebuild recommandé:
 
 ```bash
-docker build -t peppol-invoice-interpreter .
+docker build --no-cache -t peppol-invoice-interpreter .
+```
+
+Puis démarrage:
+
+```bash
 docker run --rm -p 4173:80 peppol-invoice-interpreter
 ```
 
