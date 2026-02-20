@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Peppol Invoice Interpreter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg-glow"></div>
+    <main class="app-shell">
+      <header class="hero">
+        <div class="brand-wrap">
+          <img class="brand-logo" src="./assets/logo-laboratoires-reunis.svg" alt="Laboratoires Réunis" width="600" height="112" decoding="async" />
+        </div>
+        <div class="topbar">
+          <h1 data-i18n="title">Peppol Invoice Interpreter</h1>
+          <label class="lang-switch" for="languageSelect">
+            <span data-i18n="language">Language</span>
+            <select id="languageSelect" aria-label="Language">
+              <option value="en">English</option>
+              <option value="fr">Français</option>
+              <option value="de">Deutsch</option>
+            </select>
+          </label>
+        </div>
+        <p class="subtitle" data-i18n="subtitle">
+          Upload a UBL XML invoice and instantly view header data, parties, invoice lines, totals, and embedded PDF.
+        </p>
+      </header>
+
+      <section class="panel uploader">
+        <label for="xmlFile" class="label" data-i18n="ublFile">UBL XML file</label>
+        <input id="xmlFile" type="file" accept=".xml,application/xml,text/xml" />
+        <button id="go" disabled data-i18n="interpret">Interpret</button>
+        <p class="hint" data-i18n="hint">Limit: 20 MB • Processed locally in your browser</p>
+      </section>
+
+      <section id="errorBox" class="error-box" hidden></section>
+      <section id="out" class="invoice-grid"></section>
+    </main>
+
+    <template id="invoiceTemplate">
+      <article class="panel card">
+        <h2 data-i18n="header">Header</h2>
+        <table>
+          <tr><th data-i18n="invoiceId">Invoice ID</th><td data-path="cbc:ID"></td></tr>
+          <tr><th data-i18n="issueDate">Issue date</th><td data-path="cbc:IssueDate"></td></tr>
+          <tr><th data-i18n="dueDate">Due date</th><td data-path="cbc:DueDate"></td></tr>
+          <tr><th data-i18n="currency">Currency</th><td data-path="cbc:DocumentCurrencyCode"></td></tr>
+          <tr><th data-i18n="buyerReference">Buyer reference</th><td data-path="cbc:BuyerReference"></td></tr>
+        </table>
+      </article>
+
+      <article class="panel card">
+        <h2 data-i18n="supplier">Supplier</h2>
+        <table>
+          <tr><th data-i18n="name">Name</th><td data-path="cac:AccountingSupplierParty/cac:Party/cac:PartyName/cbc:Name"></td></tr>
+          <tr><th data-i18n="vat">VAT</th><td data-path="cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID"></td></tr>
+          <tr><th data-i18n="email">Email</th><td data-path="cac:AccountingSupplierParty/cac:Party/cac:Contact/cbc:ElectronicMail"></td></tr>
+        </table>
+      </article>
+
+      <article class="panel card">
+        <h2 data-i18n="customer">Customer</h2>
+        <table>
+          <tr><th data-i18n="name">Name</th><td data-path="cac:AccountingCustomerParty/cac:Party/cac:PartyName/cbc:Name"></td></tr>
+          <tr><th data-i18n="vat">VAT</th><td data-path="cac:AccountingCustomerParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID"></td></tr>
+          <tr><th data-i18n="email">Email</th><td data-path="cac:AccountingCustomerParty/cac:Party/cac:Contact/cbc:ElectronicMail"></td></tr>
+        </table>
+      </article>
+
+      <article class="panel card span-2">
+        <h2 data-i18n="lines">Lines</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th data-i18n="description">Description</th>
+              <th class="right" data-i18n="qty">Qty</th>
+              <th class="right" data-i18n="unitPrice">Unit price</th>
+              <th class="right" data-i18n="total">Total</th>
+            </tr>
+          </thead>
+          <tbody id="lineRows"></tbody>
+        </table>
+      </article>
+
+      <article class="panel card">
+        <h2 data-i18n="totals">Totals</h2>
+        <table>
+          <tr><th data-i18n="subtotal">Subtotal</th><td class="right" data-path="cac:LegalMonetaryTotal/cbc:TaxExclusiveAmount"></td></tr>
+          <tr><th data-i18n="totalInclTax">Total incl. tax</th><td class="right" data-path="cac:LegalMonetaryTotal/cbc:TaxInclusiveAmount"></td></tr>
+          <tr><th data-i18n="payable">Payable</th><td class="right" data-path="cac:LegalMonetaryTotal/cbc:PayableAmount"></td></tr>
+        </table>
+      </article>
+
+      <article class="panel card" id="pdfCard" hidden>
+        <h2 data-i18n="embeddedPdf">Embedded PDF</h2>
+        <p id="pdfName"></p>
+        <p>
+          <a id="pdfOpen" href="#" target="_blank" rel="noopener" data-i18n="openPdf">Open PDF</a>
+          <span> · </span>
+          <a id="pdfDownload" href="#" download="" data-i18n="downloadPdf">Download PDF</a>
+        </p>
+      </article>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
