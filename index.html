@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Peppol Invoice Interpreter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="bg-glow"></div>
+    <main class="app-shell">
+      <header class="hero">
+        <div class="brand-wrap">
+          <div class="brand-mark" aria-hidden="true">L</div>
+          <div>
+            <p class="eyebrow">LABO style</p>
+            <h1>Peppol Invoice Interpreter</h1>
+          </div>
+        </div>
+        <p class="subtitle">
+          Chargez une facture UBL XML et visualisez instantanément l'en-tête, les parties, les lignes, les totaux,
+          et le PDF embarqué.
+        </p>
+      </header>
+
+      <section class="panel uploader">
+        <label for="xmlFile" class="label">Fichier XML UBL</label>
+        <input id="xmlFile" type="file" accept=".xml,application/xml,text/xml" />
+        <button id="go" disabled>Interpréter</button>
+        <p class="hint">Limite: 20 MB • Traitement local dans le navigateur</p>
+      </section>
+
+      <section id="errorBox" class="error-box" hidden></section>
+      <section id="out" class="invoice-grid"></section>
+    </main>
+
+    <template id="invoiceTemplate">
+      <article class="panel card">
+        <h2>En-tête</h2>
+        <table>
+          <tr><th>Invoice ID</th><td data-path="cbc:ID"></td></tr>
+          <tr><th>IssueDate</th><td data-path="cbc:IssueDate"></td></tr>
+          <tr><th>DueDate</th><td data-path="cbc:DueDate"></td></tr>
+          <tr><th>Currency</th><td data-path="cbc:DocumentCurrencyCode"></td></tr>
+          <tr><th>BuyerReference</th><td data-path="cbc:BuyerReference"></td></tr>
+        </table>
+      </article>
+
+      <article class="panel card">
+        <h2>Supplier</h2>
+        <table>
+          <tr><th>Name</th><td data-path="cac:AccountingSupplierParty/cac:Party/cac:PartyName/cbc:Name"></td></tr>
+          <tr><th>VAT</th><td data-path="cac:AccountingSupplierParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID"></td></tr>
+          <tr><th>Email</th><td data-path="cac:AccountingSupplierParty/cac:Party/cac:Contact/cbc:ElectronicMail"></td></tr>
+        </table>
+      </article>
+
+      <article class="panel card">
+        <h2>Customer</h2>
+        <table>
+          <tr><th>Name</th><td data-path="cac:AccountingCustomerParty/cac:Party/cac:PartyName/cbc:Name"></td></tr>
+          <tr><th>VAT</th><td data-path="cac:AccountingCustomerParty/cac:Party/cac:PartyTaxScheme/cbc:CompanyID"></td></tr>
+          <tr><th>Email</th><td data-path="cac:AccountingCustomerParty/cac:Party/cac:Contact/cbc:ElectronicMail"></td></tr>
+        </table>
+      </article>
+
+      <article class="panel card span-2">
+        <h2>Lignes</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Description</th>
+              <th class="right">Qté</th>
+              <th class="right">PU</th>
+              <th class="right">Total</th>
+            </tr>
+          </thead>
+          <tbody id="lineRows"></tbody>
+        </table>
+      </article>
+
+      <article class="panel card">
+        <h2>Totaux</h2>
+        <table>
+          <tr><th>HT</th><td class="right" data-path="cac:LegalMonetaryTotal/cbc:TaxExclusiveAmount"></td></tr>
+          <tr><th>TTC</th><td class="right" data-path="cac:LegalMonetaryTotal/cbc:TaxInclusiveAmount"></td></tr>
+          <tr><th>À payer</th><td class="right" data-path="cac:LegalMonetaryTotal/cbc:PayableAmount"></td></tr>
+        </table>
+      </article>
+
+      <article class="panel card" id="pdfCard" hidden>
+        <h2>PDF embarqué</h2>
+        <p id="pdfName"></p>
+        <p>
+          <a id="pdfOpen" href="#" target="_blank" rel="noopener">Ouvrir le PDF</a>
+          <span> · </span>
+          <a id="pdfDownload" href="#" download="">Télécharger le PDF</a>
+        </p>
+      </article>
+    </template>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

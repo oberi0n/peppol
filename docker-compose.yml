@@ -1,0 +1,8 @@
+services:
+  peppol-interpreter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "4173:80"
+    restart: unless-stopped
