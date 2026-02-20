@@ -41,10 +41,9 @@ body {
 .brand-wrap { display: flex; align-items: center; margin-bottom: 14px; }
 
 .brand-logo {
-  width: min(100%, 460px);
+  width: min(100%, 600px);
   height: auto;
-  border-radius: 16px;
-  box-shadow: 0 10px 22px rgba(0, 92, 169, 0.22);
+  display: block;
 }
 
 h1 {
