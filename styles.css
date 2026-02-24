@@ -130,9 +130,44 @@ button:disabled { opacity: 0.5; cursor: not-allowed; }
 .card h2 { margin: 0 0 12px; font-size: 1.02rem; color: var(--accent-strong); }
 .span-2 { grid-column: span 2; }
 
-table { width: 100%; border-collapse: collapse; }
-th, td { padding: 7px 0; border-bottom: 1px solid #e8eff7; text-align: left; vertical-align: top; }
-th { white-space: nowrap; font-size: 0.84rem; color: #335a7d; }
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid #d9e7f5;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+th,
+td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #e8eff7;
+  border-right: 1px solid #e8eff7;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  white-space: nowrap;
+  font-size: 0.84rem;
+  color: #335a7d;
+  background: #f4f8fd;
+}
+
+tr th:last-child,
+tr td:last-child {
+  border-right: 0;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+tbody tr:nth-child(even) td {
+  background: #fbfdff;
+}
+
 .right { text-align: right; }
 
 a { color: var(--accent); text-decoration: none; font-weight: 600; }
