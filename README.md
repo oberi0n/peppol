@@ -1,0 +1,64 @@
+# Peppol Invoice Interpreter
+
+Interface web locale pour lire une facture UBL (Peppol) et afficher:
+
+- En-tête de facture
+- Fournisseur
+- Client
+- Lignes de facture
+- Totaux
+- PDF embarqué (si présent)
+
+## Lancer en local (sans Docker)
+
+```bash
+python3 -m http.server 4173
+```
+
+Puis ouvrir `http://localhost:4173`.
+
+## Lancer avec Docker
+
+### Important
+
+Si vous voyez une page blanche, c'est souvent une image Docker locale obsolète.
+
+Rebuild recommandé:
+
+```bash
+docker build --no-cache -t peppol-invoice-interpreter .
+```
+
+Puis démarrage:
+
+```bash
+docker run --rm -p 4173:80 peppol-invoice-interpreter
+```
+
+### Docker Compose
+
+```bash
+docker compose up -d --build
+```
+
+Puis ouvrir `http://localhost:4173`.
+
+## Notes Docker
+
+Le conteneur inclut aussi:
+
+- `service-worker.js` (stub no-op)
+- `/.well-known/appspecific/com.chrome.devtools.json`
+
+pour éviter les erreurs 404 fréquentes émises par Chrome sur certains postes.
+
+
+## Multilingual UI
+
+The interface supports:
+
+- English (default)
+- French
+- German
+
+Use the language selector at the top of the page.
