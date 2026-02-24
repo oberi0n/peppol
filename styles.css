@@ -31,9 +31,9 @@ body {
 
 .app-shell {
   position: relative;
-  max-width: 1080px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 32px 18px 64px;
+  padding: 2px 2px 2px;
 }
 
 .hero { margin-bottom: 20px; }
@@ -41,7 +41,7 @@ body {
 .brand-wrap { display: block; margin-bottom: 14px; }
 
 .brand-logo {
-  width: 600px;
+  width: 300px;
   max-width: 100%;
   height: auto;
   display: block;
