@@ -210,7 +210,7 @@ function renderInvoice(xmlDoc) {
       const tr = document.createElement("tr");
       tr.innerHTML = `
         <td>${valueByPath(line, "cbc:ID")}</td>
-        <td>${valueByPath(line, "cac:Item/cbc:Description")}</td>
+        <td>${valueByPath(line, "cac:Item/cbc:Name")}</td>
         <td class="right">${valueByPath(line, "cbc:InvoicedQuantity")}</td>
         <td class="right">${valueByPath(line, "cac:Price/cbc:PriceAmount")}</td>
         <td class="right">${valueByPath(line, "cbc:LineExtensionAmount")}</td>
